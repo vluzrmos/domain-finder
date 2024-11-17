@@ -1,8 +1,12 @@
 FROM golang:1.22-alpine3.20 AS builder
 
-RUN go install github.com/projectdiscovery/alterx/cmd/alterx@latest && \
-    go install github.com/projectdiscovery/dnsx/cmd/dnsx@latest && \
-    go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+ARG SUBFINDER_VERSION=2.6.7
+ARG DNSX_VERSION=1.2.1
+ARG ALTERX_VERSION=0.0.4
+
+RUN go install github.com/projectdiscovery/alterx/cmd/alterx@v${ALTERX_VERSION} && \
+    go install github.com/projectdiscovery/dnsx/cmd/dnsx@v${DNSX_VERSION} && \
+    go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@v${SUBFINDER_VERSION}
 
 FROM alpine:3
 
