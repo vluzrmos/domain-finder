@@ -44,3 +44,9 @@ docker run -v ./subdomains.txt:/app/subdomains.txt:/app/subdomains.txt --rm vluz
 
 Considering that the `subdomains.txt` file is in the same directory as the command will run.
 
+
+### Create an alias
+You can create an alias to run the docker container with the following command:
+```bash
+sudo curl -s https://raw.githubusercontent.com/vluzrmos/domain-finder/main/run.sh -o /usr/local/bin/domain-finder && sudo chmod +x /usr/local/bin/domain-finder
+```

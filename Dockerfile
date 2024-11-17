@@ -1,7 +1,7 @@
 FROM alpine:3
 
 ## install dnsutils like dig then clear apk cache
-RUN apk add --no-cache bind-tools bash jq curl && \
+RUN apk add --no-cache bind-tools bash && \
     rm -rf /var/cache/apk/*
 
 COPY --from=projectdiscovery/alterx:v0.0.4 /usr/local/bin/alterx /usr/local/bin/alterx
