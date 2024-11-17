@@ -9,6 +9,7 @@ COPY --from=projectdiscovery/dnsx:v1.2.1 /usr/local/bin/dnsx /usr/local/bin/dnsx
 COPY --from=projectdiscovery/subfinder:v2.6.7 /usr/local/bin/subfinder /usr/local/bin/subfinder
 
 COPY main.sh /usr/local/bin/domain-finder
+COPY wordlists/ /etc/domain-finder/wordlists/
 RUN chmod +x /usr/local/bin/domain-finder
 
 # Set the working directory

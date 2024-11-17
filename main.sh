@@ -48,7 +48,8 @@
 # - Caso uma wordlist seja fornecida, ela é usada no comando alterx.
 # =======================================================================
 
-
+DIR="$(cd "$(dirname "$0")" && pwd)"
+WORDLISTS_DIR="/etc/domain-finder/wordlists"
 POSITIONAL_ARGS=()
 
 # Itera sobre todos os argumentos passados
@@ -85,7 +86,21 @@ if [ -z "$DOMAIN" ]; then
     exit 1
 fi
 
-# check wordlist file exists
+# Find the wordlist file
+if [[ -n "$WORDLIST" && ! -f "$WORDLIST" ]]; then
+    if [[ -f "$DIR/$WORDLIST" && -r "$DIR/$WORDLIST" ]]; then
+        WORDLIST="$DIR/$WORDLIST"
+    elif [[ -f "$DIR/wordlists/$WORDLIST" && -r "$DIR/wordlists/$WORDLIST" ]]; then
+        WORDLIST="$DIR/wordlists/$WORDLIST"
+    elif [[ -f "$WORDLISTS_DIR/$WORDLIST" && -r "$WORDLISTS_DIR/$WORDLIST" ]]; then
+        WORDLIST="$WORDLISTS_DIR/$WORDLIST"
+    fi
+fi
+
+if [[ -n "$WORDLIST" && ! -f "$WORDLIST" ]]; then
+    echo "Error: Wordlist file '$WORDLIST' is not found or is not readable." >> /dev/stderr
+    exit 1
+fi
 
 if [ -f "$WORDLIST" ]; then
     ALTERX_WORD="-pp word=$WORDLIST"

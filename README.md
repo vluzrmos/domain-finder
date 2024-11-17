@@ -50,3 +50,11 @@ You can create an alias to run the docker container with the following command:
 ```bash
 sudo curl -s https://raw.githubusercontent.com/vluzrmos/domain-finder/main/run.sh -o /usr/local/bin/domain-finder && sudo chmod +x /usr/local/bin/domain-finder
 ```
+
+### Wordlists
+The directory wordlists contains a files with a list of subdomain names that you can.
+
+### Example
+```bash
+docker run --rm vluzrmos/domain-finder saopaulo.sp.gov.br -w=wordlist-gov.br.txt
+```
