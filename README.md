@@ -52,7 +52,7 @@ sudo curl -s https://raw.githubusercontent.com/vluzrmos/domain-finder/main/run.s
 ```
 
 ### Wordlists
-The directory wordlists contains a files with a list of subdomain names that you can.
+The directory wordlists contains files with a list of subdomain names that you can use without create volumes.
 
 ### Example
 ```bash
