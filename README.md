@@ -26,6 +26,7 @@ docker run --rm vluzrmos/domain-finder hackerone.com
 ### Output
 ```bash
 hackerone.com. 300  IN  A 123.123.123.123
+...
 ```
 
 ## Passing list of subdomain names
