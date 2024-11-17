@@ -129,13 +129,13 @@ fi
     awk '{if (!seen[$0]++) print $0}' |
 
     # Busca entradas DNS com dnsx
-    dnsx -silent -recon -no-color |
+    # dnsx -silent -recon -no-color |
 
     # Formata a saída para ter apenas o domínio e o tipo de registro DNS
-    awk '{print $1, substr($2, 2, length($2) - 2)}' |
+    # awk '{print $1, substr($2, 2, length($2) - 2)}' |
 
     # Remove linhas duplicadas
-    awk '{if (!seen[$0]++) print $0}' |
+    # awk '{if (!seen[$0]++) print $0}' |
 
     # Executa dig para cada servidor para obter detalhes de registros DNS
     awk -v timeout=10 '
@@ -143,19 +143,36 @@ fi
         servers["google"]="@8.8.8.8";
         servers["cloudflare"]="@1.1.1.1";
 
+        recon = "A AAAA CNAME MX NS TXT SOA CAA PTR SRV AFXR ANY";
+        split(recon, types, " ");
+
+        domain=$0;
+        split("",queries)
+
+        for (i in types) {
+            queries[length(queries)+1]=domain " " types[i];
+        }
+
+        query=queries[1];
+        for (i=2; i <= length(queries); i++) {
+            query=query " " queries[i];
+        }
+
         for (server in servers) {
-            cmd="dig " $0 " " servers[server] " +nocomments +nostats +nocmd +noshowsearch +nosearch +noquestion +timeout=" timeout " 2>/dev/null"
+            cmd="dig " servers[server] " +noall +answer +retry=5 +tries=5 +timeout=" timeout " " query " 2> /dev/null"
+            
             while (cmd | getline result) { 
                 print result;
             }
             close(cmd);
         }
     }
-    ' |
+    '
+    #|
     # Remove linhas inválidas como comentários, linhas em branco e registros SOA desnecessários
     # Verifica se o registro é do domínio alvo
-    awk -v domain="$DOMAIN." '/^[^; \.#]/ {if (match($1, domain "$")) print $0}' |
+    #awk -v domain="$DOMAIN." '/^[^; \.#]/ {if (match($1, domain "$")) print $0}' |
 
     # Gera uma chave para remover linhas duplicadas considerando o domínio, o tipo de registro DNS e o valor (incluindo a prioridade, no caso do MX)
-    awk '{key=$1 " " $4; for (i=5; i <= NF; i++) { key=key " " $i}; if (!seen[key]++) print $0}'
+    #awk '{key=$1 " " $4; for (i=5; i <= NF; i++) { key=key " " $i}; if (!seen[key]++) print $0}'
 }
